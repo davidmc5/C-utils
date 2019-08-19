@@ -3,6 +3,7 @@
 #include <stdlib.h> //rand(), srand()
 #include <time.h> //time()
 #include <unistd.h> //sleep()
+#include "c-utils.h"
 
 
 /*
@@ -24,18 +25,10 @@
 //int a[] = {5,9,3,0,7,4,8,1,6,2};
 //9 6 16 19 75 34 26 54 56 73
 
-#define arraySize 10
+
 int *a; // pointer for the array to be sorted
 
-
-
-/* function declarations */
-void swap(int *, int, int);
-int partition(int *, int, int);
-void sortArray(int *, int, int);
-void printArray(int *, int);
-int * randArray(int, int);
-
+#ifdef TEST
 int main(){
   //use this main function for testing qsort()
   /* define variables */
@@ -50,6 +43,7 @@ int main(){
   printArray(a, arraySize);
   return(0);
 }
+#endif /*end test */
 
 
 void swap(int a[], int low, int high){
@@ -67,7 +61,8 @@ int partition(int a[], int low, int high){
   */
   int i = low;
   int j = high;
-  /* pick the midle element and move it to the right end */
+  // pick the midle element, pe (partition element)
+  //and move it to the right end
   swap(a, (i+j)/2, j);
   int pe = a[j];
   /*
@@ -80,8 +75,8 @@ int partition(int a[], int low, int high){
     while (i<j && a[j] >= pe) j--;
     if (i < j) swap(a, i, j);
   }
-  if (i!=high) swap(a, i, high); //move the partition element to its correct place
-  return i;
+  if (i!=high) swap(a, i, high); //swap pe to the correct place (with only lower numbers on the left)
+  return i; //if i == high --> means pe is highest value --> no swap: Leave it at the right end
 }
 
 void printArray(int a[], int aSize){

@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "c-utils.h"
 
 
-/*
-* put this in a header file
-*/
-#define MOD(x) ((x) < 0 ? -x : x)
-int gcd(int, int); //function prototype
+// /*
+// * put this in a header file
+// */
+// #define MOD(x) ((x) < 0 ? -x : x)
+// int gcd(int, int); //function prototype
 
 
 int gcd(int a, int b){
@@ -25,9 +26,10 @@ int gcd(int a, int b){
   return (gcd(min, max % min));
 }
 
+#ifdef TEST
 int main(int argCount, char *argv[]){
   if (argCount != 3){
-    printf ("Greatest common Denominator\nFormat gcd x y\n");
+    printf ("Greatest common Denominator\nSyntax gcd x y\n");
     return(0);
   }
   int x = atoi(argv[1]);
@@ -35,3 +37,4 @@ int main(int argCount, char *argv[]){
   printf ("The gcd of %d and %d is %d\n", x, y, gcd(x,y));
   return 0;
 }
+#endif /* end test */
