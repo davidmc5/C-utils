@@ -76,25 +76,37 @@ char bufOut(){
 //ALLOW ANY TYPE INPUT. nOT JUST CHARACTERS FROM STDIN
 int main(){
   int c;
-  int blank = 0;
+  int blank = 0; //Enter key without any characters. Retrieve a character from buffer
   printf("\n*******************************************************\n");
   printf("Circular Buffer Test (input: Keyboard, Output: Monitor)\n");
   printf("*******************************************************\n\n");
   printf("Enter character(s) to store. Press enter to retrieve the oldest\n\n");
   while(1){
-    if ( (c = bufIn(getchar())) > 0){
-      blank = 0;
-      PRINTBUFF;
-    }else if (c < 0 ){
-      if (blank && !empty())  {
-        printf("[%c]\n", bufOut());
-        PRINTBUFF
-      }else
-      if ( empty() ) printf("Buffer Empty\n");
-      blank = 1;
-    }else{
-      printf("Buffer Full\n");
-      blank = 0;
+    c = bufIn(getchar());
+    switch (c) {
+      case 1:
+          /* user entered characters to store */
+          blank = 0;
+          PRINTBUFF;
+          break;
+      case 0:
+          /* Buffer full */
+          printf("Buffer Full\n");
+          blank = 0;
+          break;
+      case -1:
+          /* User Pressed only Enter key */
+          if (blank && !empty())  {
+            printf("[%c]\n", bufOut());
+            PRINTBUFF
+          }else
+          if ( empty() ) printf("Buffer Empty\n");
+          blank = 1;
+          break;
+        default:
+              printf("Unexpected return code from buffIn: %d. Exiting\n", c);
+              goto EXIT;
     }
   }
+  EXIT:;
 }
