@@ -8,6 +8,12 @@
 #define BUFFSIZE 10
 //#define ABS(x) (x) < 0 ? -(x) : (x)
 
+#define PRINTBUFF \
+  printf("H:%d, T:%d - " , head, tail); \
+  for(int i = 0; i<BUFFSIZE; i++) printf("(%c) ", buffer[i]); \
+  printf(" %d\n", length);
+
+
 char buffer[BUFFSIZE];
 int head = 0; //next outbound cell
 int tail = 0; //next inbond cell
@@ -76,18 +82,13 @@ int main(){
   printf("*******************************************************\n\n");
   printf("Enter character(s) to store. Press enter to retrieve the oldest\n\n");
   while(1){
-    // printf("> ");
     if ( (c = bufIn(getchar())) > 0){
       blank = 0;
-      printf("H:%d, T:%d - " , head, tail);
-      for(int i = 0; i<BUFFSIZE; i++) printf("(%c) ", buffer[i]);
-      printf(" %d\n", length);
+      PRINTBUFF;
     }else if (c < 0 ){
       if (blank && !empty())  {
-        printf("<[%c]\n", bufOut());
-        printf("H:%d, T:%d - " , head, tail);
-        for(int i = 0; i<BUFFSIZE; i++) printf("(%c) ", buffer[i]);
-        printf(" %d\n", length);
+        printf("[%c]\n", bufOut());
+        PRINTBUFF
       }else
       if ( empty() ) printf("Buffer Empty\n");
       blank = 1;
