@@ -7,6 +7,8 @@
 
 int main(int argCount, char *argv[]){
 
+
+//This code is to test library functions
 //TO COMPILE:
 //cc -o test test.c quicksort.c gcd.c
 
