@@ -32,11 +32,11 @@ int bufIn(char c){
   if (!full()){
     buffer[tail++] = c;
     length--;
-    //wrapp tail around the end of the array
+    //wrapp tail back to begining of array
     if (tail == BUFFSIZE){
       // if (tail > BUFFSIZE-1){
       tail %= BUFFSIZE;
-      printf("Tail Wrapped\n");
+      //printf("Tail Wrapped\n");
     }
     return 1;
   }
@@ -48,11 +48,11 @@ char bufOut(){
   if(!empty()){
     char c = buffer[head++];
     length++;
-    //wrapp head around the end of the array
+    //wrapp head back to begining of array
     if (head == BUFFSIZE){
       // if (head > BUFFSIZE-1){
       head %= BUFFSIZE;
-      printf("Head Wrapped\n");
+      //printf("Head Wrapped\n");
     }
     return c;
   }
@@ -63,7 +63,7 @@ char bufOut(){
 
 //TODO: SIMPLY THIS TEST function
 //RUN MAIN() ONLY FOR TESTING, NOT AS A LIBRARY.
-//USED DEBUG OPTION TO ENABLE PRINT STATEMENTS 
+//USED DEBUG OPTION TO ENABLE PRINT STATEMENTS
 //TEST IN SEPARATE TEST.C
 //CONVERT TO A TYPE SO MULTIPLE BUFFERS CAN RUN SIMULTANEOUSLY
 //TEST WITH RANDOM INPUT AND LONGER BUFFER SIZES
@@ -71,18 +71,26 @@ char bufOut(){
 int main(){
   int c;
   int blank = 0;
-  printf("Enter Characters ");
+  printf("\n*******************************************************\n");
+  printf("Circular Buffer Test (input: Keyboard, Output: Monitor)\n");
+  printf("*******************************************************\n\n");
+  printf("Enter character(s) to store. Press enter to retrieve the oldest\n\n");
   while(1){
+    // printf("> ");
     if ( (c = bufIn(getchar())) > 0){
       blank = 0;
       printf("H:%d, T:%d - " , head, tail);
       for(int i = 0; i<BUFFSIZE; i++) printf("(%c) ", buffer[i]);
       printf(" %d\n", length);
     }else if (c < 0 ){
-      if (blank)  {
-        printf("[%c] ", bufOut());
+      if (blank && !empty())  {
+        printf("<[%c]\n", bufOut());
+        printf("H:%d, T:%d - " , head, tail);
+        for(int i = 0; i<BUFFSIZE; i++) printf("(%c) ", buffer[i]);
+        printf(" %d\n", length);
       }else
-       blank = 1;
+      if ( empty() ) printf("Buffer Empty\n");
+      blank = 1;
     }else{
       printf("Buffer Full\n");
       blank = 0;
