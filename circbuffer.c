@@ -14,13 +14,13 @@
   printf(" %d\n", length);
 
 
-char buffer[BUFFSIZE];
+int buffer[BUFFSIZE];
 int head = 0; //next outbound cell
 int tail = 0; //next inbond cell
 int length = BUFFSIZE; //available buffer space
 
 int bufIn(char c);
-char bufOut();
+int bufOut();
 int full();
 int empty();
 
@@ -50,9 +50,9 @@ int bufIn(char c){
 }
 
 //Consumer: Gets characters out of the buffer
-char bufOut(){
+int bufOut(){
   if(!empty()){
-    char c = buffer[head++];
+    int c = buffer[head++];
     length++;
     //wrapp head back to begining of array
     if (head == BUFFSIZE){
@@ -62,7 +62,7 @@ char bufOut(){
     }
     return c;
   }
-  return '0'; //NEED TO RETURN AN INTEGER AND CHECK ON MAIN()
+  return 0; //NEED TO RETURN AN INTEGER AND CHECK ON MAIN()
 }
 
 
@@ -72,8 +72,8 @@ char bufOut(){
 //USED DEBUG OPTION TO ENABLE PRINT STATEMENTS
 //TEST IN SEPARATE TEST.C
 //CONVERT TO A TYPE SO MULTIPLE BUFFERS CAN RUN SIMULTANEOUSLY
-//TEST WITH RANDOM INPUT AND LONGER BUFFER SIZES
-//ALLOW ANY TYPE INPUT. nOT JUST CHARACTERS FROM STDIN
+//TEST WITH RANDOM INPUT
+//ALLOW ANY TYPE INPUT. nOT JUST int FROM STDIN
 int main(){
   int c;
   int blank = 0; //Enter key without any characters. Retrieve a character from buffer
