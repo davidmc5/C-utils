@@ -29,34 +29,35 @@
 //CAN't INITIALIZE BUFSIZE
 //create a cbuf init function, to set the buffer size and the head/tail pointers.
 //https://stackoverflow.com/questions/42615329/create-a-variable-length-int-array-inside-a-structure-using-a-pointer
-struct Cbuf{
+
+typedef struct{
   int buffer[BUFSIZE];
   int head; //next outbound cell
   int tail; //next inbond cell
   int length; //available buffer space
-}; //use here a name to avoid declaring using "struct Cbuf"!
+} Cbuf;
 
 
 
 //DO DEFINITION FOR BUFINIT to define its size, the type of object, the input and output files, and the end of input (like \n for stdin)
-struct Cbuf bufInit(int bufsize, char elementType, int endmark);
+Cbuf bufInit(int bufsize, char elementType, int endmark);
 
 
-int bufIn(struct Cbuf *cbuf, int c);
-int bufOut(struct Cbuf *cbuf);
-int full(struct Cbuf *cbuf);
-int empty(struct Cbuf *cbuf);
+int bufIn(Cbuf *cbuf, int c);
+int bufOut(Cbuf *cbuf);
+int full(Cbuf *cbuf);
+int empty(Cbuf *cbuf);
 
 //CONVERT THESE TO DEFINITIONS
 //test for buffer full
-int full(struct Cbuf *cbuf){return (cbuf->length == 0);}
+int full(Cbuf *cbuf){return (cbuf->length == 0);}
 
 //test for buffer empty
-int empty(struct Cbuf *cbuf){return (cbuf->length == BUFSIZE);}
+int empty(Cbuf *cbuf){return (cbuf->length == BUFSIZE);}
 
 
 //Producer: adds elements to buffer if not Full.
-int bufIn(struct Cbuf *cbuf, int c){
+int bufIn(Cbuf *cbuf, int c){
   if (c == '\n') return -1;
   if (!full(cbuf)){
     cbuf->buffer[cbuf->tail++] = c;
@@ -71,7 +72,7 @@ int bufIn(struct Cbuf *cbuf, int c){
 }
 
 //Consumer: Gets characters out of the buffer
-int bufOut(struct Cbuf *cbuf){
+int bufOut(Cbuf *cbuf){
   if(!empty(cbuf)){
     int c = cbuf->buffer[cbuf->head++];
     cbuf->length++;
@@ -89,7 +90,8 @@ int bufOut(struct Cbuf *cbuf){
 //TEST IN A SEPARATE TEST.C FILE
 int main(){
 
-  struct Cbuf cbuf;
+  // struct Cbuf cbuf;
+  Cbuf cbuf;
   cbuf.head = 0;
   cbuf.tail = 0;
   cbuf.length = BUFSIZE;
