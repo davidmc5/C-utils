@@ -1,15 +1,15 @@
 #include <stdio.h>
 #include <ctype.h>
+#include <stdlib.h> //for malloc
 
 // circular buffer (FIFO)
 
 //TODO:
 //
-// Enable bufinit to initialize array size with calloc.
 
 //test above with multiple buffers SIMULTANEOUSLY
 //ALLOW multiple sources. nOT JUST int FROM STDIN
-//allow MULTIPLE DESTINATIONS (MONITOR, FILE, SEIRAL PORT, ETC)
+//allow MULTIPLE DESTINATIONS (MONITOR, FILE, SERIAL PORT, ETC)
 //RUN MAIN() ONLY FOR TESTING, NOT AS A LIBRARY.
 //USED DEBUG OPTION TO ENABLE PRINT STATEMENTS
 //TEST IN SEPARATE TEST.C
@@ -26,12 +26,8 @@
     for(int i = 0; i<BUFSIZE; i++) printf("(%c) ", cbuf.buffer[i]); \
     printf(" %d\n", cbuf.length);
 
-//CAN't INITIALIZE BUFSIZE
-//create a cbuf init function, to set the buffer size and the head/tail pointers.
-//https://stackoverflow.com/questions/42615329/create-a-variable-length-int-array-inside-a-structure-using-a-pointer
-
 typedef struct{
-  int buffer[BUFSIZE];
+  int *buffer;  // void* ? dynamically alocated by cbuf_init()- https://stackoverflow.com/a/2061103
   int head; //next outbound cell
   int tail; //next inbond cell
   int length; //available buffer space
@@ -39,9 +35,8 @@ typedef struct{
 
 
 // prototypes
-
-//DO DEFINITION FOR BUFINIT to define its size, the type of object, the input and output files, and the end of input (like \n for stdin)
-Cbuf *cbuf_init(int bufsize, char elementType, int endmark);
+//HOW CAN I REMOVE THE POINTER ASTERISK FROM CBUF RETURN TYPE?
+Cbuf *cbuf_init(int bufsize);
 int cbuf_in(Cbuf *cbuf, int c);
 int cbuf_out(Cbuf *cbuf);
 int cbuf_full(Cbuf *cbuf);
@@ -84,6 +79,25 @@ int cbuf_out(Cbuf *cbuf){
   return 0;
 }
 
+/*
+* Initialize a circular buffer object with given arguments
+* Return a pointer to the new cbuf object
+*/
+Cbuf *cbuf_init(int bufsize){
+  /*
+  * Include formal parameters for
+  * type of the buffer elements,
+  * type input and output streams(stdin/file),
+  * end delimeter of input (like \n for stdin)
+  */
+  Cbuf *cbuf = malloc(sizeof(Cbuf)); //https://stackoverflow.com/q/5327012
+  cbuf->head = 0;
+  cbuf->tail = 0;
+  cbuf->length = bufsize;
+  cbuf->buffer = malloc(bufsize * sizeof(cbuf->buffer));
+  return cbuf;
+}
+
 
 //TEST
 
@@ -91,11 +105,7 @@ int cbuf_out(Cbuf *cbuf){
 //TEST IN A SEPARATE TEST.C FILE
 int main(){
 
-  // struct Cbuf cbuf;
-  Cbuf cbuf;
-  cbuf.head = 0;
-  cbuf.tail = 0;
-  cbuf.length = BUFSIZE;
+  Cbuf cbuf = *cbuf_init(BUFSIZE);
 
   //STRUCT TEST
   printf("Head: %d, Tail: %d, Length: %d", cbuf.head, cbuf.tail, cbuf.length);
