@@ -7,12 +7,14 @@
 //TODO:
 //
 
-//test above with multiple buffers SIMULTANEOUSLY
-//ALLOW multiple sources. nOT JUST int FROM STDIN
-//allow MULTIPLE DESTINATIONS (MONITOR, FILE, SERIAL PORT, ETC)
-//RUN MAIN() ONLY FOR TESTING, NOT AS A LIBRARY.
-//USED DEBUG OPTION TO ENABLE PRINT STATEMENTS
+//UNDERSTAND WHY CBUF_NEW WORKS WITH MALLOC
+//build test function and remove main()
 //TEST IN SEPARATE TEST.C
+// cbuf_new add more parameter options
+//test multiple buffers SIMULTANEOUSLY
+//ALLOW multiple sources. NOT JUST int FROM STDIN
+//allow MULTIPLE DESTINATIONS (MONITOR, FILE, SERIAL PORT, ETC)
+//USED DEBUG OPTION TO ENABLE PRINT STATEMENTS
 //TEST WITH RANDOM INPUT
 
 
@@ -35,8 +37,7 @@ typedef struct{
 
 
 // prototypes
-//HOW CAN I REMOVE THE POINTER ASTERISK FROM CBUF RETURN TYPE?
-Cbuf *cbuf_init(int bufsize);
+Cbuf cbuf_new(int bufsize);
 int cbuf_in(Cbuf *cbuf, int c);
 int cbuf_out(Cbuf *cbuf);
 int cbuf_full(Cbuf *cbuf);
@@ -83,19 +84,20 @@ int cbuf_out(Cbuf *cbuf){
 * Initialize a circular buffer object with given arguments
 * Return a pointer to the new cbuf object
 */
-Cbuf *cbuf_init(int bufsize){
+Cbuf cbuf_new(int bufsize){
   /*
-  * Include formal parameters for
-  * type of the buffer elements,
-  * type input and output streams(stdin/file),
-  * end delimeter of input (like \n for stdin)
+  * Include formal parameters for:
+  * --type of the buffer elements,
+  * --type input and output streams(stdin/file),
+  * --end delimeter of input (like \n for stdin)
+  * --FIFO / LIFO
   */
   Cbuf *cbuf = malloc(sizeof(Cbuf)); //https://stackoverflow.com/q/5327012
   cbuf->head = 0;
   cbuf->tail = 0;
   cbuf->length = bufsize;
   cbuf->buffer = malloc(bufsize * sizeof(cbuf->buffer));
-  return cbuf;
+  return *cbuf;
 }
 
 
@@ -104,8 +106,9 @@ Cbuf *cbuf_init(int bufsize){
 //CHANGE THIS TO A TEST function instead of main()
 //TEST IN A SEPARATE TEST.C FILE
 int main(){
-
-  Cbuf cbuf = *cbuf_init(BUFSIZE);
+//4
+  Cbuf cbuf = cbuf_new(BUFSIZE);
+  // Cbuf cbuf = *cbuf_init(BUFSIZE);
 
   //STRUCT TEST
   printf("Head: %d, Tail: %d, Length: %d", cbuf.head, cbuf.tail, cbuf.length);
