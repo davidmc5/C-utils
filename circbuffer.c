@@ -38,28 +38,27 @@ typedef struct{
 } Cbuf;
 
 
+// prototypes
 
 //DO DEFINITION FOR BUFINIT to define its size, the type of object, the input and output files, and the end of input (like \n for stdin)
-Cbuf bufInit(int bufsize, char elementType, int endmark);
+Cbuf *cbuf_init(int bufsize, char elementType, int endmark);
+int cbuf_in(Cbuf *cbuf, int c);
+int cbuf_out(Cbuf *cbuf);
+int cbuf_full(Cbuf *cbuf);
+int cbuf_empty(Cbuf *cbuf);
 
+//function definitions
 
-int bufIn(Cbuf *cbuf, int c);
-int bufOut(Cbuf *cbuf);
-int full(Cbuf *cbuf);
-int empty(Cbuf *cbuf);
-
-//CONVERT THESE TO DEFINITIONS
 //test for buffer full
-int full(Cbuf *cbuf){return (cbuf->length == 0);}
+int cbuf_full(Cbuf *cbuf){return (cbuf->length == 0);}
 
 //test for buffer empty
-int empty(Cbuf *cbuf){return (cbuf->length == BUFSIZE);}
-
+int cbuf_empty(Cbuf *cbuf){return (cbuf->length == BUFSIZE);}
 
 //Producer: adds elements to buffer if not Full.
-int bufIn(Cbuf *cbuf, int c){
+int cbuf_in(Cbuf *cbuf, int c){
   if (c == '\n') return -1;
-  if (!full(cbuf)){
+  if (!cbuf_full(cbuf)){
     cbuf->buffer[cbuf->tail++] = c;
     cbuf->length--;
     //wrapp tail back to begining of array
@@ -72,8 +71,8 @@ int bufIn(Cbuf *cbuf, int c){
 }
 
 //Consumer: Gets characters out of the buffer
-int bufOut(Cbuf *cbuf){
-  if(!empty(cbuf)){
+int cbuf_out(Cbuf *cbuf){
+  if(!cbuf_empty(cbuf)){
     int c = cbuf->buffer[cbuf->head++];
     cbuf->length++;
     //wrapp head back to begining of array
@@ -86,7 +85,9 @@ int bufOut(Cbuf *cbuf){
 }
 
 
-//CONVERT THIS TO A TEST function
+//TEST
+
+//CHANGE THIS TO A TEST function instead of main()
 //TEST IN A SEPARATE TEST.C FILE
 int main(){
 
@@ -106,7 +107,7 @@ int main(){
   printf("*******************************************************\n\n");
   printf("Enter character(s) to store. Press enter to retrieve the oldest\n\n");
   while(1){
-    c = bufIn(&cbuf, getchar());
+    c = cbuf_in(&cbuf, getchar());
     switch (c) {
       case 1:
           /* user entered characters to store */
@@ -120,11 +121,11 @@ int main(){
           break;
       case -1:
           /* User Pressed only Enter key */
-          if (blank && !empty(&cbuf))  {
-            printf("[%c]\n", bufOut(&cbuf));
+          if (blank && !cbuf_empty(&cbuf))  {
+            printf("[%c]\n", cbuf_out(&cbuf));
             PRINTBUFF
           }else
-          if ( empty(&cbuf) ) printf("Buffer Empty\n");
+          if ( cbuf_empty(&cbuf) ) printf("Buffer Empty\n");
           blank = 1;
           break;
         default:
