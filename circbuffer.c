@@ -5,7 +5,6 @@
 
 //TODO:
 //
-// MODIFY the four BUFFER fuctions to use struct
 // Enable bufinit to initialize array size with calloc.
 
 //test above with multiple buffers SIMULTANEOUSLY
@@ -22,12 +21,6 @@
 #define BUFSIZE 10
 //#define ABS(x) (x) < 0 ? -(x) : (x)
 
-//used for testing
-// #define PRINTBUFF \
-//   printf("H:%d, T:%d - " , head, tail); \
-//   for(int i = 0; i<BUFSIZE; i++) printf("(%c) ", buffer[i]); \
-//   printf(" %d\n", length);
-
   #define PRINTBUFF \
     printf("H:%d, T:%d - " , cbuf.head, cbuf.tail); \
     for(int i = 0; i<BUFSIZE; i++) printf("(%c) ", cbuf.buffer[i]); \
@@ -41,25 +34,14 @@ struct Cbuf{
   int head; //next outbound cell
   int tail; //next inbond cell
   int length; //available buffer space
-}; //use here a name to avoid declaring using struct Cbuf!
+}; //use here a name to avoid declaring using "struct Cbuf"!
 
 
-
-//remove this when cbuf struct is implemented
-// int buffer[BUFSIZE];
-// int head = 0; //next outbound cell
-// int tail = 0; //next inbond cell
-// int length = BUFSIZE; //available buffer space
 
 //DO DEFINITION FOR BUFINIT to define its size, the type of object, the input and output files, and the end of input (like \n for stdin)
 struct Cbuf bufInit(int bufsize, char elementType, int endmark);
 
 
-//MODIFY THESE FUCTIONS TO USE CBUF STRUCT
-// int bufIn(int c);
-// int bufOut();
-// int full();
-// int empty();
 int bufIn(struct Cbuf *cbuf, int c);
 int bufOut(struct Cbuf *cbuf);
 int full(struct Cbuf *cbuf);
@@ -67,7 +49,6 @@ int empty(struct Cbuf *cbuf);
 
 //CONVERT THESE TO DEFINITIONS
 //test for buffer full
-//int full(){return (length == 0);}
 int full(struct Cbuf *cbuf){return (cbuf->length == 0);}
 
 //test for buffer empty
@@ -75,20 +56,6 @@ int empty(struct Cbuf *cbuf){return (cbuf->length == BUFSIZE);}
 
 
 //Producer: adds elements to buffer if not Full.
-//Copy given element to array cell, increment tail and decrease available lenght
-// int bufIn(int c){
-//   if (c == '\n') return -1;
-//   if (!full()){
-//     buffer[tail++] = c;
-//     length--;
-//     //wrapp tail back to begining of array
-//     if (tail == BUFSIZE){
-//       tail %= BUFSIZE;
-//     }
-//     return 1;
-//   }
-//   return 0;
-// }
 int bufIn(struct Cbuf *cbuf, int c){
   if (c == '\n') return -1;
   if (!full(cbuf)){
@@ -104,18 +71,6 @@ int bufIn(struct Cbuf *cbuf, int c){
 }
 
 //Consumer: Gets characters out of the buffer
-// int bufOut(){
-//   if(!empty()){
-//     int c = buffer[head++];
-//     length++;
-//     //wrapp head back to begining of array
-//     if (head == BUFSIZE){
-//       head %= BUFSIZE;
-//     }
-//     return c;
-//   }
-//   return 0;
-// }
 int bufOut(struct Cbuf *cbuf){
   if(!empty(cbuf)){
     int c = cbuf->buffer[cbuf->head++];
@@ -130,7 +85,8 @@ int bufOut(struct Cbuf *cbuf){
 }
 
 
-
+//CONVERT THIS TO A TEST function
+//TEST IN A SEPARATE TEST.C FILE
 int main(){
 
   struct Cbuf cbuf;
