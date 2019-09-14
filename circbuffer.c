@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h> //for malloc
+#include "circbuffer.h"
 
 // circular buffer (FIFO)
 
@@ -20,31 +21,11 @@
 
 
 
-#define BUFSIZE 10
-
 #define PRINTBUFF(cbuf) \
     printf("H:%d, T:%d - " , cbuf.head, cbuf.tail); \
-    for(int i = 0; i<BUFSIZE; i++) printf("(%c) ", cbuf.buffer[i]); \
-    printf(" %d\n", cbuf.length);
+    for(int i = 0; i<cbuf.size; i++) printf("(%c) ", cbuf.buffer[i]); \
+        printf(" %d\n", cbuf.length);
 
-// typedef struct{
-struct cirbuf {
-  unsigned *buffer;  // void* ? dynamically alocated by cbuf_init()- https://stackoverflow.com/a/2061103
-  unsigned size; //size of the buffer
-  unsigned head; //next outbound cell
-  unsigned tail; //next inbond cell
-  unsigned length; //available buffer space
-};
-
-typedef struct cirbuf Cbuf;
-
-// prototypes
-Cbuf cbuf_new(unsigned bufsize);
-int cbuf_in(Cbuf *cbuf, int c);
-int cbuf_out(Cbuf *cbuf);
-int cbuf_full(Cbuf cbuf);
-int cbuf_empty(Cbuf cbuf);
-void cbuf_test(unsigned size);
 
 
 //function definitions
@@ -109,10 +90,8 @@ Cbuf cbuf_new(unsigned bufsize){
 * Test function for the circular buffer
 */
 void cbuf_test(unsigned size){
-  Cbuf cbuf = cbuf_new(BUFSIZE);
-  // Cbuf cbuf = *cbuf_init(BUFSIZE);
+  Cbuf cbuf = cbuf_new(size);
 
-  //STRUCT TEST
   printf("Head: %d, Tail: %d, Length: %d", cbuf.head, cbuf.tail, cbuf.length);
 
   int c;
@@ -152,6 +131,6 @@ void cbuf_test(unsigned size){
   ;
 }
 
-int main(){
-  cbuf_test(10);
-}
+// int main(){
+//   cbuf_test(10);
+// }

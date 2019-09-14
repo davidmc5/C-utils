@@ -10,29 +10,40 @@ int main(int argCount, char *argv[]){
 
 //This code is to test library functions
 //TO COMPILE:
-//cc -o test test.c quicksort.c gcd.c
+// cc -o test test.c quicksort.c gcd.c
+//cc -o test test.c circbuffer.c
 
+//*****************************************************
+// Test circular buffer
+//To Compile: cc -o test test.c circbuffer.c
+#include "circbuffer.h"
+cbuf_test(10);
 
-  //test gcd - greatest common denominator of the two integers
-  // given in the command line
-  if (argCount != 3){
-    printf ("Greatest common Denominator\nSyntax gcd x y\n");
-    return(0);
-  }
-  int x = atoi(argv[1]);
-  int y = atoi(argv[2]);
-  printf ("The gcd of %d and %d is %d\n", x, y, gcd(x,y));
+//*****************************************************
+  // //test gcd - greatest common denominator of the two integers
+  //
+  // // given in the command line
+  // if (argCount != 3){
+  //   printf ("Greatest common Denominator\nSyntax gcd x y\n");
+  //   return(0);
+  // }
+  // int x = atoi(argv[1]);
+  // int y = atoi(argv[2]);
+  // printf ("The gcd of %d and %d is %d\n", x, y, gcd(x,y));
+//*****************************************************
+  // //test quicksort
+  // //
+  // /* define variables */
+  // int aLow = 0;
+  // int aHigh = arraySize-1;
+  // /* populate test array with random numbers */
+  // a = randArray(arraySize, 2);
+  // printf ("Unsorted Array:");
+  // printArray(a, arraySize);
+  // sortArray(a, aLow, aHigh);
+  // printf ("Sorted Array:");
+  // printArray(a, arraySize);
+  // return(0);
+  //*****************************************************
 
-  //test quicksort
-  /* define variables */
-  int aLow = 0;
-  int aHigh = arraySize-1;
-  /* populate test array with random numbers */
-  a = randArray(arraySize, 2);
-  printf ("Unsorted Array:");
-  printArray(a, arraySize);
-  sortArray(a, aLow, aHigh);
-  printf ("Sorted Array:");
-  printArray(a, arraySize);
-  return(0);
 }
