@@ -89,11 +89,8 @@ void cbuf_test(unsigned size){
   Cbuf cbuf = cbuf_new(size);
   int c;
   int blank = 0;
-
-  //
   //Type characters + <Enter> will add them to buffer
   //<Enter> key without any typing characters: Retrieve one character from buffer
-
   printf("\n*******************************************************\n");
   printf("Circular Buffer Test (input: Keyboard, Output: Monitor)\n");
   printf("*******************************************************\n\n");

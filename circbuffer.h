@@ -29,13 +29,45 @@ extern int cbuf_full(Cbuf cbuf);
 /* buffer empty test */
 extern int cbuf_empty(Cbuf cbuf);
 
+/* Demosntration/Test function */
+extern void cbuf_test(unsigned size);
+
 /*
-* test function to demonstrate circular buffer
+* Example using the test function to demonstrate circular buffer
 *
 * To test, compile and run the following program:
-* #include "circbuffer.h"
-* int main(){
-*  cbuf_test(10);
-* }
+
+ #include "circbuffer.h"
+ int main(){
+  cbuf_test(10);
+ }
+
 */
 extern void cbuf_test(unsigned size);
+
+/*
+
+
+
+// Example of usage
+//gets one character from stdin and prints it out
+
+#include "circbuffer.h"
+void test(unsigned size){
+  Cbuf cbuf = cbuf_new(size);
+  int c;
+  printf("Type one character + <Enter>");
+  if (!cbuf_full(cbuf)){
+      c = cbuf_in(&cbuf, getchar()); //if c = 0, buffer is full, if -1, end of input
+  }
+  if (!cbuf_empty(cbuf))  {
+      printf("The first character you typed was: %c\n", cbuf_out(&cbuf)); //get and print one character
+  }
+}
+
+int main(){
+  void test(unsigned size);
+  test(10);
+}
+
+*/
