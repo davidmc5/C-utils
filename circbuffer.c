@@ -21,7 +21,6 @@
 
 
 #define BUFSIZE 10
-//#define ABS(x) (x) < 0 ? -(x) : (x)
 
 #define PRINTBUFF(cbuf) \
     printf("H:%d, T:%d - " , cbuf.head, cbuf.tail); \
@@ -30,8 +29,8 @@
 
 // typedef struct{
 struct cirbuf {
-  unsigned size; //size of the buffer
   unsigned *buffer;  // void* ? dynamically alocated by cbuf_init()- https://stackoverflow.com/a/2061103
+  unsigned size; //size of the buffer
   unsigned head; //next outbound cell
   unsigned tail; //next inbond cell
   unsigned length; //available buffer space
@@ -39,31 +38,32 @@ struct cirbuf {
 
 typedef struct cirbuf Cbuf;
 
-
 // prototypes
 Cbuf cbuf_new(unsigned bufsize);
 int cbuf_in(Cbuf *cbuf, int c);
 int cbuf_out(Cbuf *cbuf);
-int cbuf_full(Cbuf *cbuf);
-int cbuf_empty(Cbuf *cbuf);
+int cbuf_full(Cbuf cbuf);
+int cbuf_empty(Cbuf cbuf);
+void cbuf_test(unsigned size);
+
 
 //function definitions
 
 //test for buffer full
-int cbuf_full(Cbuf *cbuf){return (cbuf->length == 0);}
+int cbuf_full(Cbuf cbuf){return (cbuf.length == 0);}
 
 //test for buffer empty
-int cbuf_empty(Cbuf *cbuf){return (cbuf->length == BUFSIZE);}
+int cbuf_empty(Cbuf cbuf){return (cbuf.length == cbuf.size);}
 
-//Producer: adds elements to buffer if not Full.
+// //Producer: adds elements to buffer if not Full.
 int cbuf_in(Cbuf *cbuf, int c){
   if (c == '\n') return -1;
-  if (!cbuf_full(cbuf)){
+  if (!cbuf_full(*cbuf)){
     cbuf->buffer[cbuf->tail++] = c;
     cbuf->length--;
     //wrapp tail back to begining of array
-    if (cbuf->tail == BUFSIZE){
-      cbuf->tail %= BUFSIZE;
+    if (cbuf->tail == cbuf->size){
+      cbuf->tail %= cbuf->size;
     }
     return 1;
   }
@@ -72,12 +72,12 @@ int cbuf_in(Cbuf *cbuf, int c){
 
 //Consumer: Gets characters out of the buffer
 int cbuf_out(Cbuf *cbuf){
-  if(!cbuf_empty(cbuf)){
+  if(!cbuf_empty(*cbuf)){
     int c = cbuf->buffer[cbuf->head++];
     cbuf->length++;
     //wrapp head back to begining of array
-    if (cbuf->head == BUFSIZE){
-      cbuf->head %= BUFSIZE;
+    if (cbuf->head == cbuf->size){
+      cbuf->head %= cbuf->size;
     }
     return c;
   }
@@ -86,7 +86,7 @@ int cbuf_out(Cbuf *cbuf){
 
 /*
 * Initialize a circular buffer object with given arguments
-* Return a pointer to the new cbuf object
+* Return a copy of the new cbuf object
 */
 Cbuf cbuf_new(unsigned bufsize){
   /*
@@ -96,22 +96,19 @@ Cbuf cbuf_new(unsigned bufsize){
   * --end delimeter of input (like \n for stdin)
   * --FIFO / LIFO
   */
-  Cbuf *cbuf = malloc(sizeof(Cbuf)); //https://stackoverflow.com/q/5327012
-  cbuf->size = bufsize;
-  cbuf->head = 0;
-  cbuf->tail = 0;
-  cbuf->length = bufsize;
-  cbuf->buffer = malloc(bufsize * sizeof(cbuf->buffer));
-  return *cbuf;
+  Cbuf cbuf = {NULL, 0, 0, 0, 0};
+  cbuf.buffer = malloc(bufsize * sizeof(cbuf.buffer)); //https://stackoverflow.com/q/5327012
+  cbuf.size = bufsize;
+  cbuf.length = bufsize;
+  return cbuf;
 }
 
 
-//TEST
 
-//CHANGE THIS TO A TEST function instead of main()
-//TEST IN A SEPARATE TEST.C FILE
-int main(){
-//4
+/*
+* Test function for the circular buffer
+*/
+void cbuf_test(unsigned size){
   Cbuf cbuf = cbuf_new(BUFSIZE);
   // Cbuf cbuf = *cbuf_init(BUFSIZE);
 
@@ -139,11 +136,11 @@ int main(){
           break;
       case -1:
           /* User Pressed only Enter key */
-          if (blank && !cbuf_empty(&cbuf))  {
+          if (blank && !cbuf_empty(cbuf))  {
             printf("[%c]\n", cbuf_out(&cbuf));
             PRINTBUFF(cbuf)
           }else
-          if ( cbuf_empty(&cbuf) ) printf("Buffer Empty\n");
+          if ( cbuf_empty(cbuf) ) printf("Buffer Empty\n");
           blank = 1;
           break;
         default:
@@ -153,4 +150,8 @@ int main(){
   }
   EXIT:
   ;
+}
+
+int main(){
+  cbuf_test(10);
 }
