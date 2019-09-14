@@ -5,12 +5,12 @@
 // circular buffer (FIFO)
 
 //TODO:
-//
 
 //UNDERSTAND WHY CBUF_NEW WORKS WITH MALLOC
+//GIT MERGE BRANCH TO MASTER AND PUSH
 //build test function and remove main()
 //TEST IN SEPARATE TEST.C
-// cbuf_new add more parameter options
+// Add more parameter options to cbuf_new()
 //test multiple buffers SIMULTANEOUSLY
 //ALLOW multiple sources. NOT JUST int FROM STDIN
 //allow MULTIPLE DESTINATIONS (MONITOR, FILE, SERIAL PORT, ETC)
@@ -23,21 +23,22 @@
 #define BUFSIZE 10
 //#define ABS(x) (x) < 0 ? -(x) : (x)
 
-  #define PRINTBUFF \
+#define PRINTBUFF \
     printf("H:%d, T:%d - " , cbuf.head, cbuf.tail); \
     for(int i = 0; i<BUFSIZE; i++) printf("(%c) ", cbuf.buffer[i]); \
     printf(" %d\n", cbuf.length);
 
 typedef struct{
-  int *buffer;  // void* ? dynamically alocated by cbuf_init()- https://stackoverflow.com/a/2061103
-  int head; //next outbound cell
-  int tail; //next inbond cell
-  int length; //available buffer space
+  unsigned size; //size of the buffer
+  unsigned *buffer;  // void* ? dynamically alocated by cbuf_init()- https://stackoverflow.com/a/2061103
+  unsigned head; //next outbound cell
+  unsigned tail; //next inbond cell
+  unsigned length; //available buffer space
 } Cbuf;
 
 
 // prototypes
-Cbuf cbuf_new(int bufsize);
+Cbuf cbuf_new(unsigned bufsize);
 int cbuf_in(Cbuf *cbuf, int c);
 int cbuf_out(Cbuf *cbuf);
 int cbuf_full(Cbuf *cbuf);
@@ -84,7 +85,7 @@ int cbuf_out(Cbuf *cbuf){
 * Initialize a circular buffer object with given arguments
 * Return a pointer to the new cbuf object
 */
-Cbuf cbuf_new(int bufsize){
+Cbuf cbuf_new(unsigned bufsize){
   /*
   * Include formal parameters for:
   * --type of the buffer elements,
@@ -93,6 +94,7 @@ Cbuf cbuf_new(int bufsize){
   * --FIFO / LIFO
   */
   Cbuf *cbuf = malloc(sizeof(Cbuf)); //https://stackoverflow.com/q/5327012
+  cbuf->size = bufsize;
   cbuf->head = 0;
   cbuf->tail = 0;
   cbuf->length = bufsize;
