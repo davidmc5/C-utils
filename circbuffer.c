@@ -23,18 +23,21 @@
 #define BUFSIZE 10
 //#define ABS(x) (x) < 0 ? -(x) : (x)
 
-#define PRINTBUFF \
+#define PRINTBUFF(cbuf) \
     printf("H:%d, T:%d - " , cbuf.head, cbuf.tail); \
     for(int i = 0; i<BUFSIZE; i++) printf("(%c) ", cbuf.buffer[i]); \
     printf(" %d\n", cbuf.length);
 
-typedef struct{
+// typedef struct{
+struct cirbuf {
   unsigned size; //size of the buffer
   unsigned *buffer;  // void* ? dynamically alocated by cbuf_init()- https://stackoverflow.com/a/2061103
   unsigned head; //next outbound cell
   unsigned tail; //next inbond cell
   unsigned length; //available buffer space
-} Cbuf;
+};
+
+typedef struct cirbuf Cbuf;
 
 
 // prototypes
@@ -127,7 +130,7 @@ int main(){
       case 1:
           /* user entered characters to store */
           blank = 0;
-          PRINTBUFF;
+          PRINTBUFF(cbuf);
           break;
       case 0:
           /* Buffer full */
@@ -138,7 +141,7 @@ int main(){
           /* User Pressed only Enter key */
           if (blank && !cbuf_empty(&cbuf))  {
             printf("[%c]\n", cbuf_out(&cbuf));
-            PRINTBUFF
+            PRINTBUFF(cbuf)
           }else
           if ( cbuf_empty(&cbuf) ) printf("Buffer Empty\n");
           blank = 1;
