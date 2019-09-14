@@ -9,18 +9,14 @@
 
 //UNDERSTAND WHY CBUF_NEW WORKS WITH MALLOC
 //GIT MERGE BRANCH TO MASTER AND PUSH
-//build test function and remove main()
-//TEST IN SEPARATE TEST.C
 // Add more parameter options to cbuf_new()
 //test multiple buffers SIMULTANEOUSLY
 //ALLOW multiple sources. NOT JUST int FROM STDIN
 //allow MULTIPLE DESTINATIONS (MONITOR, FILE, SERIAL PORT, ETC)
-//USED DEBUG OPTION TO ENABLE PRINT STATEMENTS
 //TEST WITH RANDOM INPUT
 
 
-
-
+// printbuff is used for the test function only
 #define PRINTBUFF(cbuf) \
     printf("H:%d, T:%d - " , cbuf.head, cbuf.tail); \
     for(int i = 0; i<cbuf.size; i++) printf("(%c) ", cbuf.buffer[i]); \
@@ -71,7 +67,7 @@ int cbuf_out(Cbuf *cbuf){
 */
 Cbuf cbuf_new(unsigned bufsize){
   /*
-  * Include formal parameters for:
+  * Include aditional formal parameters to specify:
   * --type of the buffer elements,
   * --type input and output streams(stdin/file),
   * --end delimeter of input (like \n for stdin)
@@ -91,11 +87,13 @@ Cbuf cbuf_new(unsigned bufsize){
 */
 void cbuf_test(unsigned size){
   Cbuf cbuf = cbuf_new(size);
-
-  printf("Head: %d, Tail: %d, Length: %d", cbuf.head, cbuf.tail, cbuf.length);
-
   int c;
-  int blank = 0; //Enter key without any characters. Retrieve a character from buffer
+  int blank = 0;
+
+  //
+  //Type characters + <Enter> will add them to buffer
+  //<Enter> key without any typing characters: Retrieve one character from buffer
+
   printf("\n*******************************************************\n");
   printf("Circular Buffer Test (input: Keyboard, Output: Monitor)\n");
   printf("*******************************************************\n\n");
@@ -130,7 +128,3 @@ void cbuf_test(unsigned size){
   EXIT:
   ;
 }
-
-// int main(){
-//   cbuf_test(10);
-// }

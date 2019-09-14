@@ -17,7 +17,7 @@ int main(int argCount, char *argv[]){
 // Test circular buffer
 //To Compile: cc -o test test.c circbuffer.c
 #include "circbuffer.h"
-cbuf_test(10);
+cbuf_test(5);
 
 //*****************************************************
   // //test gcd - greatest common denominator of the two integers
