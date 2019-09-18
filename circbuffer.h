@@ -17,11 +17,14 @@ typedef struct cirbuf Cbuf;
 /* Returns a new circular buffer with the given size */
 extern Cbuf cbuf_new(unsigned bufsize);
 
+/* free alocated buffer memory */
+extern void cbuf_free(Cbuf cbuf);
+
 /* Producer function to add objects to the buffer */
-extern int cbuf_in(Cbuf *cbuf, int c);
+extern int cbuf_in(Cbuf *cbuf, int c); //pass a pointer since we need to modify head and tail
 
 /* Consumer function to retrieve objects from the buffer */
-extern int cbuf_out(Cbuf *cbuf);
+extern int cbuf_out(Cbuf *cbuf); //pass a pointer since we need to modify head and tail
 
 /* buffer full test */
 extern int cbuf_full(Cbuf cbuf);
@@ -29,13 +32,13 @@ extern int cbuf_full(Cbuf cbuf);
 /* buffer empty test */
 extern int cbuf_empty(Cbuf cbuf);
 
-/* Demosntration/Test function */
+/* Demonstration/Test function */
 extern void cbuf_test(unsigned size);
 
 /*
 * Example using the test function to demonstrate circular buffer
 *
-* To test, compile and run the following program:
+* To test, save (test.c) compile (cc test.c circbuffer.c -o test) and run (./test) the following program:
 
  #include "circbuffer.h"
  int main(){
@@ -43,14 +46,10 @@ extern void cbuf_test(unsigned size);
  }
 
 */
-extern void cbuf_test(unsigned size);
 
 /*
-
-
-
-// Example of usage
-//gets one character from stdin and prints it out
+// Example of usage using all interface functions
+// gets one character from stdin and prints it out
 
 #include "circbuffer.h"
 void test(unsigned size){

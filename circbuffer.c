@@ -15,7 +15,6 @@
 //allow MULTIPLE DESTINATIONS (MONITOR, FILE, SERIAL PORT, ETC)
 //TEST WITH RANDOM INPUT
 
-
 // printbuff is used for the test function only
 #define PRINTBUFF(cbuf) \
     printf("H:%d, T:%d - " , cbuf.head, cbuf.tail); \
@@ -74,12 +73,17 @@ Cbuf cbuf_new(unsigned bufsize){
   * --FIFO / LIFO
   */
   Cbuf cbuf = {NULL, 0, 0, 0, 0};
-  cbuf.buffer = malloc(bufsize * sizeof(cbuf.buffer)); //https://stackoverflow.com/q/5327012
+  cbuf.buffer = (unsigned *) malloc(bufsize * sizeof(cbuf.buffer)); //https://stackoverflow.com/q/5327012
   cbuf.size = bufsize;
   cbuf.length = bufsize;
   return cbuf;
 }
 
+/* Free space */
+void cbuf_free(Cbuf cbuf){
+  //de-allocate memory
+  free(cbuf.buffer);
+}
 
 
 /*

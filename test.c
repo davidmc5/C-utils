@@ -19,6 +19,8 @@ void test(unsigned size){
   if (!cbuf_empty(cbuf))  {
       printf("The first character you typed was: %c\n", cbuf_out(&cbuf)); //get and print one character
   }
+
+  cbuf_free(cbuf);
 }
 
 
